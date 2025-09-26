@@ -17,7 +17,7 @@ interface NavbarProps {
   onSearch?: (query: string) => void;
 }
 const BACKEND_URL=process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
-
+console.log(BACKEND_URL);
 export default function Navbar({ onSearch }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
