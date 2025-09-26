@@ -379,7 +379,7 @@ router.get('/voices', async (req: Request, res: Response) => {
         const voices = await elevenlabs.voices.getAll();
         res.json(voices);
     } catch (error) {
-        console.error("Error fetching voices:", error);
+        console.error("Error fetching Voices:", error);
         res.status(500).json({ error: "Error fetching voices" });
     }
 });
