@@ -41,6 +41,7 @@ export default function ProfilePage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const BACKEND_URL=process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
     if (user && isLoaded) {
@@ -48,7 +49,7 @@ export default function ProfilePage() {
         try {
           setLoading(true)
           // Fetch profile info
-          const profileRes = await fetch(`http://localhost:5000/api/profile/${user.id}`)
+          const profileRes = await fetch(`${BACKEND_URL}/api/profile/${user.id}`)
           if (profileRes.ok) {
             const profileData = await profileRes.json()
             setProfile(profileData.profile || profileData)
@@ -57,7 +58,7 @@ export default function ProfilePage() {
           }
 
           // Fetch user podcasts
-          const podcastsRes = await fetch(`http://localhost:5000/api/profile/${user.id}/podcasts`)
+          const podcastsRes = await fetch(`${BACKEND_URL}/api/profile/${user.id}/podcasts`)
           if (podcastsRes.ok) {
             const podcastsData = await podcastsRes.json()
             setPodcasts(podcastsData.myPodcasts || podcastsData || [])
@@ -100,7 +101,7 @@ export default function ProfilePage() {
         setUploadingImage(true)
       }
 
-      const res = await fetch(`http://localhost:5000/api/profile/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/profile/${user.id}`, {
         method: "PUT",
         body:formData,
       })

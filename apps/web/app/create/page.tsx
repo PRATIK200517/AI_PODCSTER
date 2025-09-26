@@ -39,7 +39,7 @@ const CreatePodcast = () => {
   const [generatedAudioBlob, setGeneratedAudioBlob] = useState<Blob | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const contentControllerRef = useRef<AbortController | null>(null);
-
+  const BACKEND_URL=process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
   const categories = [
     'Technology',
     'Business',
@@ -60,7 +60,7 @@ const CreatePodcast = () => {
     useEffect(() => {
     const fetchVoices = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/elevenlabs/voices');
+        const res = await fetch(`${BACKEND_URL}/api/elevenlabs/voices`);
         const data = await res.json();
         setVoices(data.voices || []);
       } catch (err) {
@@ -92,7 +92,7 @@ const CreatePodcast = () => {
     setThumbnailError(null);
 
     try {
-      const response = await fetch('http://localhost:5000/generate-thumbnail', {
+      const response = await fetch(`${BACKEND_URL}/generate-thumbnail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const CreatePodcast = () => {
     setFormData(f => ({ ...f, aiGenerated: "" }));
 
     try {
-      const res = await fetch("http://localhost:5000/generate-content-stream", {
+      const res = await fetch(`${BACKEND_URL}/generate-content-stream`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -204,7 +204,7 @@ const CreatePodcast = () => {
     setFormData(f => ({ ...f, description: "" }));
 
     try {
-      const res = await fetch("http://localhost:5000/generate-description", {
+      const res = await fetch(`${BACKEND_URL}/generate-description`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: formData.description })
@@ -268,7 +268,7 @@ const CreatePodcast = () => {
 
     setIsGeneratingPreview(true);
     try {
-      const response = await fetch('http://localhost:5000/generate-podcast-audio', {
+      const response = await fetch(`${BACKEND_URL}/generate-podcast-audio`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ const CreatePodcast = () => {
         console.log(key, value);
       }
 
-      const response = await fetch('http://localhost:5000/api/podcasts', {
+      const response = await fetch(`${BACKEND_URL}/api/podcasts`    , {
         method: 'POST',
         body: formDataToSend,
       });

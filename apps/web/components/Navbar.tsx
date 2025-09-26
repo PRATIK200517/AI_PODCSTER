@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation"
 interface NavbarProps {
   onSearch?: (query: string) => void;
 }
+const BACKEND_URL=process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
 export default function Navbar({ onSearch }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -28,7 +29,7 @@ export default function Navbar({ onSearch }: NavbarProps) {
     const createUserProfile = async () => {
       if (user && isLoaded) {
         try {
-          const response = await fetch('http://localhost:5000/api/profile/', {
+          const response = await fetch(`${BACKEND_URL}/api/profile/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

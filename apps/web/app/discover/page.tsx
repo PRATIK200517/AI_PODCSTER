@@ -22,6 +22,7 @@ import {
   SkipForward,
   Maximize2,
 } from "lucide-react";
+const BACKEND_URL=process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
 // Types
 interface Podcast {
@@ -252,7 +253,7 @@ const ShareModal = ({
       if (podcast && isOpen) {
         setLoading(true);
         try {
-          const res = await fetch(`http://localhost:5000/api/podcasts/${podcast.id}/share`);
+          const res = await fetch(`${BACKEND_URL}/api/podcasts/${podcast.id}/share`);
           const data = await res.json();
           setShareData(data);
         } catch (err) {
@@ -664,7 +665,7 @@ export default function DiscoverPage() {
   useEffect(() => {
     const fetchPodcasts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/podcasts");
+        const res = await fetch(`${BACKEND_URL}/podcasts`);
         const data = await res.json();
         setPodcasts(data);
       } catch (err) {
@@ -686,7 +687,7 @@ export default function DiscoverPage() {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/profile/saved-podcasts",
+        `${BACKEND_URL}/api/profile/saved-podcasts`,
         {
           method: "POST",
           credentials: "include",
@@ -712,7 +713,7 @@ export default function DiscoverPage() {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/profile/liked-podcasts",
+        `${BACKEND_URL}/api/profile/liked-podcasts`,
         {
           method: "POST",
           credentials: "include",
@@ -782,7 +783,7 @@ export default function DiscoverPage() {
     if (!user) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/podcasts/${id}/like`, {
+      const res = await fetch(`${BACKEND_URL}/api/podcasts/${id}/like`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -817,7 +818,7 @@ export default function DiscoverPage() {
 
     setSaving(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/podcasts/${id}/save`, {
+      const res = await fetch(`${BACKEND_URL}/api/podcasts/${id}/save`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -848,7 +849,7 @@ export default function DiscoverPage() {
   };
   const createProfileAndSavePodcast = async (podcastId: number) => {
     try {
-      const profileRes = await fetch("http://localhost:5000/profile", {
+      const profileRes = await fetch(`${BACKEND_URL}/profile`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -863,7 +864,7 @@ export default function DiscoverPage() {
       if (profileRes.ok) {
         // Now save the podcast
         const saveRes = await fetch(
-          `http://localhost:5000/api/podcasts/${podcastId}/save`,
+          `${BACKEND_URL}/api/podcasts/${podcastId}/save`,
           {
             method: "POST",
             credentials: "include",
