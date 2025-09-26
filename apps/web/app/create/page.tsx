@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Mic, Image, Sparkles, Type, Wand2, X, Play, Pause } from 'lucide-react';
-import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import { useUser } from "@clerk/nextjs";
 interface Voice {
   voice_id: string;
@@ -58,20 +57,14 @@ const CreatePodcast = () => {
   const { user } = useUser();
 
   // Fetch available voices
-  useEffect(() => {
+    useEffect(() => {
     const fetchVoices = async () => {
       try {
-        const elevenlabs = new ElevenLabsClient({
-          apiKey: 'sk_4d0029d145b08b7bb7f35e54c1eb4ed98ccfb46f15df0b92',
-        });
-
-        const result = await elevenlabs.voices.getAll();
-        console.log(result);
-
-
-        setVoices(result.voices || []);
+        const res = await fetch('http://localhost:5000/api/elevenlabs/voices');
+        const data = await res.json();
+        setVoices(data.voices || []);
       } catch (err) {
-        console.error("Error fetching voices:", err);
+        console.error('Error fetching voices:', err);
       } finally {
         setIsLoadingVoices(false);
       }

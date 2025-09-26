@@ -3,7 +3,7 @@ import multer, { FileFilterCallback } from 'multer';
 import { Pool } from 'pg';
 import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
-
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 // Create a router
 const router2: Router = express.Router();
 
@@ -265,6 +265,19 @@ router2.get('/podcasts/:id', async (req: Request, res: Response) => {
   }
 });
 
+router2.get('/api/elevenlabs/voices', async (req, res) => {
+  try {
+    const elevenlabs = new ElevenLabsClient({
+      apiKey: process.env.ELEVENLABS_API_KEY, 
+    });
+
+    const result = await elevenlabs.voices.getAll();
+    res.json({ voices: result.voices || [] });
+  } catch (err) {
+    console.error('Error fetching voices:', err);
+    res.status(500).json({ error: 'Failed to fetch voices' });
+  }
+});
 // Add this route to your backend
 router2.get('/api/podcasts/:id/share', async (req: Request, res: Response) => {
   try {
