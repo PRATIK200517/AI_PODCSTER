@@ -56,7 +56,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({ isVisible, onMinimize }) 
             {/* Current Podcast Info */}
             <div className="flex items-center space-x-4 flex-1 min-w-0">
               <img
-                src={currentPodcast.imageUrl}
+                src={currentPodcast.thumbnailUrl}
                 alt={currentPodcast.title}
                 className="h-12 w-12 rounded-lg object-cover"
               />

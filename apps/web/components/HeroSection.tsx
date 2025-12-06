@@ -1,7 +1,12 @@
 import React from 'react';
 import { TrendingUp, Star, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-const HeroSection: React.FC = () => {
+
+interface HeroSectionProps {
+  onSearch?: (query: string) => void;
+}
+
+const HeroSection = ({onSearch}:HeroSectionProps) => {
   const router = useRouter();
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">

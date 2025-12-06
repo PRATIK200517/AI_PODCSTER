@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause, Clock, Users, Heart } from 'lucide-react';
+import { Play, Pause, Clock, Heart } from 'lucide-react';
 import { Podcast } from '../types';
 
 interface PodcastCardProps {
@@ -17,6 +17,8 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
 }) => {
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
+    
     if (isPlaying) {
       onPause();
     } else {
@@ -24,7 +26,8 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
     }
   };
 
-  const formatListeners = (count: number) => {
+  const formatLikes = (count: number | undefined) => {
+    if (!count) return '0';
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
     } else if (count >= 1000) {
@@ -33,21 +36,37 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
     return count.toString();
   };
 
+  const formatDuration = (seconds: number) => {
+    if (!seconds) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
+
   return (
-    <div className="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+    <div 
+      className="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+      onClick={() => onPlay(podcast)}
+    >
       <div className="relative">
         <img
-          src={podcast.imageUrl}
+          src={podcast.thumbnailUrl}
           alt={podcast.title}
           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         
         {/* Play Button Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+          isPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+        }`}>
           <button
             onClick={handlePlayClick}
-            className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-4 shadow-lg transform hover:scale-110 transition-all duration-200"
+            className={`rounded-full p-4 shadow-lg transform hover:scale-110 transition-all duration-200 ${
+              isPlaying 
+                ? 'bg-red-600 hover:bg-red-700 text-white' 
+                : 'bg-purple-600 hover:bg-purple-700 text-white'
+            }`}
           >
             {isPlaying ? (
               <Pause className="h-6 w-6" />
@@ -67,7 +86,7 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
         {/* Like Button */}
         <div className="absolute top-3 right-3">
           <button className="bg-black/20 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/40 transition-colors duration-200">
-            <Heart className="h-4 w-4" />
+            <Heart className="h-4 w-4" fill={podcast.likes ? "currentColor" : "none"} />
           </button>
         </div>
       </div>
@@ -86,11 +105,11 @@ const PodcastCard: React.FC<PodcastCardProps> = ({
           <div className="flex items-center space-x-3">
             <div className="flex items-center">
               <Clock className="h-4 w-4 mr-1" />
-              <span>{podcast.duration}</span>
+              <span>{formatDuration(podcast.duration)}</span>
             </div>
             <div className="flex items-center">
-              <Users className="h-4 w-4 mr-1" />
-              <span>{formatListeners(podcast.listeners)}</span>
+              <Heart className="h-4 w-4 mr-1" fill="currentColor" />
+              <span>{formatLikes(podcast.likes)}</span>
             </div>
           </div>
         </div>
