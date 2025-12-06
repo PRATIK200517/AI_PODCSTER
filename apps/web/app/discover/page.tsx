@@ -82,7 +82,7 @@ const PodcastCard = ({
     onLike(podcast.id);
   };
 
-  const handleSaveClick = (e: React.MouseEvent) => {
+  const handlesaveClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSave(podcast.id);
   };
@@ -153,7 +153,7 @@ const PodcastCard = ({
         <button
           className={`transition ${isSaved ? "text-yellow-400" : "hover:text-yellow-400"
             }`}
-          onClick={handleSaveClick}
+          onClick={handlesaveClick}
         >
           <Bookmark className="h-5 w-5" fill={isSaved ? "currentColor" : "none"} />
         </button>
